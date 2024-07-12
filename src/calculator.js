@@ -1,87 +1,89 @@
 import React, { useState } from 'react';
 
-const Calculator = () => {
-    const [display, setDisplay] = useState('0');
-    const [currentValue, setCurrentValue] = useState(null);
-    const [operator, setOperator] = useState(null);
-    const [waitingForOperand, setWaitingForOperand] = useState(false);
+const inputRef = useRef(null); 
+  const resultRef = useRef(null); 
+  const formRef = useRef();
+  const [result, setResult] = useState(0);
+  //const [input, setInput] = useState(0);
+ 
+  function plus(e) {
+    e.preventDefault();
+  //  setResult((result) => result + Number(input))
+   // formRef.current.reset();
+    setResult((result) => result + Number(inputRef.current.value))
+  };
+ 
+  function minus(e) { 
+    e.preventDefault(); 
+    setResult((result) => result - Number(inputRef.current.value));
+   // formRef.current.reset();
+  };
+ 
+  function times(e) { 
+    e.preventDefault(); 
+     
+    if(result === 0){
+      setResult((result) =>  Number(inputRef.current.value));
+    } else {
+      setResult((result) =>  result * Number(inputRef.current.value));
+    }
+      
+    
+   
+   // formRef.current.reset();
+    
+  }; 
+ 
+  function divide(e) { 
+    e.preventDefault(); 
+    if(result === 0){
+      setResult((result) =>  Number(inputRef.current.value));
+    } else {
+      setResult((result) =>  result / Number(inputRef.current.value));
+    }
+      
+   // formRef.current.reset();
+  };
+ 
+  function resetInput(e) {
+    e.preventDefault(); 
+   //setInput(null);
+    formRef.current.reset();
+  };
   
-    const handleDigitClick = (digit) => {
-      if (waitingForOperand) {
-        setDisplay(String(digit));
-        setWaitingForOperand(false);
-      } else {
-        setDisplay(display === '0' ? String(digit) : display + digit);
-      }
-    };
+ 
+  function resetResult(e) { 
+     e.preventDefault(); 
+   setResult(0);
+    //formRef.current.reset();
+  };
   
-    const handleOperatorClick = (nextOperator) => {
-      const nextValue = parseFloat(display);
   
-      if (currentValue === null) {
-        setCurrentValue(nextValue);
-      } else if (operator) {
-        const result = applyOperator(operator, currentValue, nextValue);
-        setCurrentValue(result);
-        setDisplay(String(result));
-      }
-  
-      setWaitingForOperand(true);
-      setOperator(nextOperator);
-    };
-  
-    const applyOperator = (operator, currentValue, nextValue) => {
-      switch (operator) {
-        case '+':
-          return currentValue + nextValue;
-        case '-':
-          return currentValue - nextValue;
-        case '*':
-          return currentValue * nextValue;
-        case '/':
-          return currentValue / nextValue;
-        default:
-          return nextValue;
-      }
-    };
-  
-    const handleEqualClick = () => {
-      const nextValue = parseFloat(display);
-  
-      if (operator && !waitingForOperand) {
-        const result = applyOperator(operator, currentValue, nextValue);
-        setCurrentValue(null);
-        setOperator(null);
-        setDisplay(String(result));
-        setWaitingForOperand(true);
-      }
-    };
-  
-    const handleClear = () => {
-      setDisplay('0');
-      setCurrentValue(null);
-      setOperator(null);
-      setWaitingForOperand(false);
-    };
-  
-    return (
-      <div className="calculator">
-        <div className="calculator-display">{display}</div>
-        <div className="calculator-keypad">
-          <button onClick={() => handleDigitClick(7)}>7</button>
-          <button onClick={() => handleDigitClick(8)}>8</button>
-          <button onClick={() => handleDigitClick(9)}>9</button>
-          <button onClick={() => handleOperatorClick('/')}>/</button>
-  
-          <button onClick={() => handleDigitClick(4)}>4</button>
-          <button onClick={() => handleDigitClick(5)}>5</button>
-          <button onClick={() => handleDigitClick(6)}>6</button>
-          <button onClick={() => handleOperatorClick('*')}>*</button>
-  
-          <button onClick={() => handleDigitClick(1)}>1</button>
-         </div>
-         </div>
-    )
-}
+ 
+  return ( 
+    <div className="App"> 
+      <div> 
+        <h1>Simplest Working Calculator</h1> 
+      </div> 
+      <form ref ={formRef}>
+        <p ref={resultRef}> 
+          {result} 
+        </p>
+        <input
+          pattern="[0-9]" 
+          ref={inputRef}
+          type="number" 
+          placeholder="Type a number"
+         // onChange = { e => setInput(e.target.value)}
+        />
+        <button onClick={plus}>add </button>
+        <button onClick={minus}>substract</button>
+        <button onClick={times}>multiply</button>
+        <button onClick={divide}>divide</button>
+        <button onClick={resetInput}>reset input</button>
+        <button onClick={resetResult}>reset result</button>
+      </form> 
+    </div> 
+  ); 
 
 export default Calculator;
