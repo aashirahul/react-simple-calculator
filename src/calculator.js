@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
+
+function Calculator(){
 
 const inputRef = useRef(null); 
   const resultRef = useRef(null); 
@@ -60,11 +62,9 @@ const inputRef = useRef(null);
   
   
  
-  return ( 
+  return (
+
     <div className="App"> 
-      <div> 
-        <h1>Simplest Working Calculator</h1> 
-      </div> 
       <form ref ={formRef}>
         <p ref={resultRef}> 
           {result} 
@@ -85,5 +85,7 @@ const inputRef = useRef(null);
       </form> 
     </div> 
   ); 
+
+}
 
 export default Calculator;
